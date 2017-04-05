@@ -1,4 +1,5 @@
 import React from 'react';
+
 import FFXIV from '../assets/images/ffxiv.jpeg';
 
 const Styles = {
@@ -14,22 +15,14 @@ const Styles = {
 export default function GameGroup(props){
   return(
     <div style={Styles.gameGroup}>
+        <img src={FFXIV} alt={'FFXIV Avatar'} />
         <div>
-          <img src={FFXIV} alt={'FFXIV Avatar'} />
-        </div>
-        <div>
-          <h2>
-            Final Fantasy XIV
-          </h2>
-          <p>Location: Jacksonville, Fl</p>
-          <p>Group Lead: Jonathan Stewart </p>
-          <p>Current Players: 5</p>
-          <p>Players Needed: 3</p>
-          <p>
-            Description: Recruiting for Alexander
-            Savage static raid party. Need Tank and 2 DPS.
-            Minimum ilvl 265
-          </p>
+          <h2>{props.gameData.game}</h2>
+          <p>Location: {props.gameData.location}</p>
+          <p>Group Lead: {props.gameData.lead} </p>
+          <p>Current Players: {props.gameData.currentPlayers}</p>
+          <p>Players Needed: {props.gameData.playersNeeded}</p>
+          <p>Description: {props.gameData.description}</p>
         </div>
     </div>
   )

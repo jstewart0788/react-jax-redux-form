@@ -1,4 +1,5 @@
 import React from 'react';
+
 import HeaderImage from '../assets/images/header.jpg'
 
 const Styles = {

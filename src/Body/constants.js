@@ -1,0 +1,1 @@
+export const FETCH_GAME_LIST = "FETCH_GAME_LIST";

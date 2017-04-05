@@ -1,18 +1,61 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router'
+
 import GameGroup from '../GameGroup';
+import { fetchGameList } from './actions';
 
 const Styles = {
   main:{
     background: 'white',
     padding: '100px',
     color: 'blue'
+  },
+  button: {
+    margin: '0px 0px 45px 45px'
   }
 }
 
-export default function Body() {
+class Body extends Component {
+
+  componentWillMount() {
+    this.props.fetchGameList();
+  }
+
+  renderGames(){
     return (
-      <div style={Styles.main}>
-        <GameGroup />
-      </div>
+      this.props.games ?
+      this.props.games.map((game, index) => {
+        return (
+          <GameGroup
+            key={`${game.game}${game.lead}${index}`}
+            gameData={game}
+          />
+        )
+      }) :
+      <div> Loading . . . </div>
     );
+  }
+
+  render() {
+    return (
+      <div>
+        <div style={Styles.main}>
+          <Link to="/game/new" className="btn btn-primary" style={Styles.button}>
+            Recruit Members
+          </Link>
+          {this.renderGames()}
+        </div>
+      </div>
+    )};
 }
+
+function mapStateToProps(state) {
+  console.log("mapStateToProps Body => ", state)
+  return {
+    games: state.body.games
+  }
+}
+
+
+export default connect(mapStateToProps, {fetchGameList})(Body);
