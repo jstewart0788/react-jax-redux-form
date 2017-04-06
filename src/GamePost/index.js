@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router'
 
-import { postGame } from './actions'
+import { postGame, wipeStatus } from './actions'
 
 const Styles = {
   formContainer:{
@@ -42,6 +42,10 @@ class GamePost extends Component {
   componentWillReceiveProps(nextProps){
     if(nextProps.postStatus)
       browserHistory.push('/')
+  }
+
+  componentWillUnmount(){
+    this.props.wipeStatus();
   }
 
   render(){
@@ -132,4 +136,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps,{postGame})(GamePost)
+export default connect(mapStateToProps,{postGame, wipeStatus})(GamePost)

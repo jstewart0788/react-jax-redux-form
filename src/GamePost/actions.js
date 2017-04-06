@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { POST_GAME } from './constants';
+import { POST_GAME, WIPE_STATUS } from './constants';
 
 const api_url = "http://localhost:4000/api"
 
@@ -16,3 +16,9 @@ export function postGame(data){
     });
   }
 };
+
+export function wipeStatus(){
+  return{
+    type: WIPE_STATUS
+  }
+}
