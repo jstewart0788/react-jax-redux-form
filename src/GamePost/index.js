@@ -58,18 +58,18 @@ class GamePost extends Component {
               >
                 <option value="ffxiv" >Final Fantasy XIV</option>
                 <option value="d&d" >Dungeons & Dragons</option>
-                <option value="dota" >DotA</option>
+                <option value="dota" >DotA 2</option>
               </select>
             </label>
           </div>
           <div className="form-group">
-            <label style={Styles.formElement} > Location
+            <label style={Styles.formElement} > Email
               <input
-                type="text"
-                name="location"
+                type="email"
+                name="email"
                 className="form-control"
                 onChange={this.handleChange}
-                value={this.state.location ? this.state.location : ""}
+                value={this.state.email ? this.state.email : ""}
               />
             </label>
           </div>

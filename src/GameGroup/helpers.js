@@ -14,3 +14,16 @@ export function imageMap(game){
       break;
   }
 }
+
+export function nameMap(game){
+  switch(game){
+    case "ffxiv":
+      return "Final Fantasy XIV"
+    case "d&d":
+      return "Dungeons & Dragons"
+    case "dota":
+      return "DotA 2"
+    default:
+      break;
+  }
+}

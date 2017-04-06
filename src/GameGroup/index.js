@@ -1,5 +1,5 @@
 import React from 'react';
-import {imageMap} from './helpers';
+import {imageMap, nameMap} from './helpers';
 
 
 const Styles = {
@@ -31,8 +31,8 @@ export default function GameGroup(props){
           />
         </div>
         <div>
-          <h2>{props.gameData.game}</h2>
-          <p>Location: {props.gameData.location}</p>
+          <h2>{nameMap(props.gameData.game)}</h2>
+          <p>Email: {props.gameData.email}</p>
           <p>Group Lead: {props.gameData.lead} </p>
           <p>Current Players: {props.gameData.currentPlayers}</p>
           <p>Players Needed: {props.gameData.playersNeeded}</p>
