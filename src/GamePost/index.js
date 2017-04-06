@@ -54,7 +54,7 @@ class GamePost extends Component {
                 className="form-control"
                 name="game"
                 onChange={this.handleChange}
-                value={this.state.form.game}
+                value={this.state.game}
               >
                 <option value="ffxiv" >Final Fantasy XIV</option>
                 <option value="d&d" >Dungeons & Dragons</option>
@@ -69,7 +69,7 @@ class GamePost extends Component {
                 name="location"
                 className="form-control"
                 onChange={this.handleChange}
-                value={this.state.form.location ? this.state.form.location : ""}
+                value={this.state.location ? this.state.location : ""}
               />
             </label>
           </div>
@@ -80,7 +80,7 @@ class GamePost extends Component {
                 name="lead"
                 className="form-control"
                 onChange={this.handleChange}
-                value={this.state.form.lead ? this.state.form.lead : ""}
+                value={this.state.lead ? this.state.lead : ""}
               />
             </label>
           </div>
@@ -91,7 +91,7 @@ class GamePost extends Component {
                 name="currentPlayers"
                 className="form-control"
                 onChange={this.handleChange}
-                value={this.state.form.currentPlayers ? this.state.form.currentPlayers: ""}
+                value={this.state.currentPlayers ? this.state.currentPlayers: ""}
               />
             </label>
           </div>
@@ -102,7 +102,7 @@ class GamePost extends Component {
                 className="form-control"
                 name="playersNeeded"
                 onChange={this.handleChange}
-                value={this.state.form.playersNeeded ? this.state.form.playersNeeded : ""}
+                value={this.state.playersNeeded ? this.state.playersNeeded : ""}
               />
             </label>
           </div>
@@ -114,7 +114,7 @@ class GamePost extends Component {
                 name="description"
                 rows="3"
                 onChange={this.handleChange}
-                value={this.state.form.description ? this.state.form.description : ""}
+                value={this.state.description ? this.state.description : ""}
               />
             </label>
           </div>
