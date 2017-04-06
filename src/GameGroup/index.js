@@ -1,21 +1,35 @@
 import React from 'react';
+import {imageMap} from './helpers';
 
-import FFXIV from '../assets/images/ffxiv.jpeg';
 
 const Styles = {
   gameGroup:{
     border: '1px solid blue',
     borderRadius: '50px',
     padding: '25px',
+    margin: '0px 0px 50px 0px',
     display: 'flex',
-    justifyContent: 'space-around'
+    justifyContent: 'flex-start'
+  },
+  imageContainer:{
+    margin: '0px 40px'
+  },
+  image:{
+    maxWidth: '225px',
+    maxHeight: '225px'
   }
 }
 
 export default function GameGroup(props){
   return(
     <div style={Styles.gameGroup}>
-        <img src={FFXIV} alt={'FFXIV Avatar'} />
+        <div style={Styles.imageContainer}>
+          <img
+            style={Styles.image}
+            src={imageMap(props.gameData.game)}
+            alt={`${props.gameData.game} Avatar`}
+          />
+        </div>
         <div>
           <h2>{props.gameData.game}</h2>
           <p>Location: {props.gameData.location}</p>

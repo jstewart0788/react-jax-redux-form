@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router'
+
+import { postGame } from './actions'
 
 const Styles = {
   formContainer:{
@@ -14,47 +18,30 @@ const Styles = {
   }
 }
 
-export default class GamePost extends Component {
+class GamePost extends Component {
   constructor(props){
     super(props);
     this.state={
-      form: {
-        game: "Final Fantasy XIV"
-      },
-      api_url: "http://localhost:4000/api"
+      game: "ffxiv"
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e){
-    switch(e.target.ref){
-      case "game":
-        this.setState({form:{...this.state.form, game: e.target.value}});
-        break;
-      case "test":
-        this.setState({form:{...this.state.form, location: e.target.value}});
-        break;
-      case "lead":
-        this.setState({form:{...this.state.form, lead: e.target.value}});
-        break;
-      case "currentPlayers":
-        this.setState({form:{...this.state.form, currentPlayers: e.target.value}});
-        break;
-      case "playersNeeded":
-        this.setState({form:{...this.state.form, playersNeeded: e.target.value}});
-        break;
-      case "description":
-        this.setState({form:{...this.state.form, description: e.target.value}});
-        break;
-      default:
-        break;
-    }
+    const value = e.target.value;
+    const name = e.target.name
+    this.setState({ [name]: value });
   }
 
   handleSubmit(e){
-    console.log(this.state)
     e.preventDefault();
+    this.props.postGame(this.state)
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.postStatus)
+      browserHistory.push('/')
   }
 
   render(){
@@ -65,6 +52,7 @@ export default class GamePost extends Component {
             <label style={Styles.formElement} > Game
               <select
                 className="form-control"
+                name="game"
                 onChange={this.handleChange}
                 value={this.state.form.game}
               >
@@ -78,10 +66,10 @@ export default class GamePost extends Component {
             <label style={Styles.formElement} > Location
               <input
                 type="text"
-                ref="test"
+                name="location"
                 className="form-control"
                 onChange={this.handleChange}
-                value={this.state.form.location}
+                value={this.state.form.location ? this.state.form.location : ""}
               />
             </label>
           </div>
@@ -89,9 +77,10 @@ export default class GamePost extends Component {
             <label style={Styles.formElement} > Group Lead
               <input
                 type="text"
+                name="lead"
                 className="form-control"
                 onChange={this.handleChange}
-                value={this.state.form.lead}
+                value={this.state.form.lead ? this.state.form.lead : ""}
               />
             </label>
           </div>
@@ -99,9 +88,10 @@ export default class GamePost extends Component {
             <label style={Styles.formElement} > Number of Players
               <input
                 type="number"
+                name="currentPlayers"
                 className="form-control"
                 onChange={this.handleChange}
-                value={this.state.form.currentPlayers}
+                value={this.state.form.currentPlayers ? this.state.form.currentPlayers: ""}
               />
             </label>
           </div>
@@ -110,8 +100,9 @@ export default class GamePost extends Component {
               <input
                 type="number"
                 className="form-control"
+                name="playersNeeded"
                 onChange={this.handleChange}
-                value={this.state.form.playersNeeded}
+                value={this.state.form.playersNeeded ? this.state.form.playersNeeded : ""}
               />
             </label>
           </div>
@@ -120,10 +111,10 @@ export default class GamePost extends Component {
               <textarea
                 style={Styles.textArea}
                 className="form-control"
-                id="description"
+                name="description"
                 rows="3"
                 onChange={this.handleChange}
-                value={this.state.form.description}
+                value={this.state.form.description ? this.state.form.description : ""}
               />
             </label>
           </div>
@@ -133,3 +124,12 @@ export default class GamePost extends Component {
     )
   }
 };
+
+function mapStateToProps(state) {
+  console.log("mapStateToProps Body => ", state)
+  return {
+    postStatus: state.gamePost.postStatus
+  }
+}
+
+export default connect(mapStateToProps,{postGame})(GamePost)

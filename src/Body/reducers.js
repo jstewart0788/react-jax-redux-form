@@ -1,8 +1,6 @@
 import { FETCH_GAME_LIST } from './constants';
 
-const initialState = {
-
-};
+const initialState = {};
 
 export default function body(state = initialState, action){
   switch(action.type){
