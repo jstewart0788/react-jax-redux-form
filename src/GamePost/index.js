@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router'
+import { Field, reduxForm, SubmissionError, initialize } from 'redux-form';
+import axios from 'axios';
 
-import { postGame, wipeStatus } from './actions'
+import {API_URL} from './constants';
+import { postGame } from './actions';
 
 const Styles = {
   formContainer:{
@@ -15,112 +18,149 @@ const Styles = {
   },
   formElement: {
     width: '100%'
+  },
+  error: {
+    color: 'red'
   }
+}
+const required = value => value ? undefined:'Required'
+const email = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?
+  'Invalid email address' : undefined
+
+const renderInput = ({input, label, type, meta: {touched, error, warning}}) => {
+  return(
+    <div style={error || warning ? Styles.error : {}}>
+      <label> {label} </label>
+      <div>
+        <input className="form-control" {...input} placeholder={label} type={type} />
+        {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
+      </div>
+    </div>
+  )
+}
+
+const renderSelectField= ({input, label, meta: {touched, error, warning}, children}) => {
+  return(
+    <div style={error || warning ? Styles.error : {}}>
+      <label> {label} </label>
+      <div>
+        <select className="form-control" {...input} >
+           {children}
+        </select>
+        {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
+      </div>
+    </div>
+  )
+}
+
+const renderTextArea = ({input, label, rows, meta: {touched, error, warning}}) => {
+  return(
+    <div style={error || warning ? Styles.error : {}}>
+      <label> {label} </label>
+      <div>
+        <textarea className="form-control" {...input} placeholder={label} rows={rows} />
+        {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
+      </div>
+    </div>
+  )
 }
 
 class GamePost extends Component {
   constructor(props){
     super(props);
-    this.state={
-      game: "ffxiv"
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentWillMount(){
+    if(this.props.params){
+      axios.get(`${API_URL}/game`, {
+        params: {
+          id: this.props.params.id
+        }
+      })
+      .then(({data}) => {
+        console.log(data)
+        this.props.initForm('gamePost', data)
+      })
+      .catch(err => {
+        console.log(err)
+      });
     }
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(e){
-    const value = e.target.value;
-    const name = e.target.name
-    this.setState({ [name]: value });
-  }
-
-  handleSubmit(e){
-    e.preventDefault();
-    this.props.postGame(this.state)
-  }
-
-  componentWillReceiveProps(nextProps){
-    if(nextProps.postStatus)
-      browserHistory.push('/')
-  }
-
-  componentWillUnmount(){
-    this.props.wipeStatus();
+  onSubmit(values){
+    return new Promise(resolve => this.props.postGame(resolve, values)).then((success) => {
+      if(success){
+        browserHistory.push('/')
+      }
+      else{
+        throw new SubmissionError({_error: "failed to post"})
+      }
+    })
   }
 
   render(){
+    const {handleSubmit, error } = this.props;
     return(
       <div style={Styles.formContainer}>
-        <form style={Styles.form} onSubmit={this.handleSubmit}>
+        <form style={Styles.form} onSubmit={handleSubmit(this.onSubmit)}>
           <div className="form-group">
-            <label style={Styles.formElement} > Game
-              <select
-                className="form-control"
-                name="game"
-                onChange={this.handleChange}
-                value={this.state.game}
-              >
-                <option value="ffxiv" >Final Fantasy XIV</option>
-                <option value="d&d" >Dungeons & Dragons</option>
-                <option value="dota" >DotA 2</option>
-              </select>
-            </label>
+            <Field
+              name="game"
+              component={renderSelectField}
+              label="Game"
+              validate={required}
+            >
+              <option></option>
+              <option value="ffxiv" >Final Fantasy XIV</option>
+              <option value="d&d" >Dungeons & Dragons</option>
+              <option value="dota" >DotA 2</option>
+            </Field>
           </div>
           <div className="form-group">
-            <label style={Styles.formElement} > Email
-              <input
-                type="email"
-                name="email"
-                className="form-control"
-                onChange={this.handleChange}
-                value={this.state.email ? this.state.email : ""}
-              />
-            </label>
+            <Field
+              type="email"
+              label="Email"
+              name="email"
+              component={renderInput}
+              validate={email}
+            />
           </div>
           <div className="form-group">
-            <label style={Styles.formElement} > Group Lead
-              <input
-                type="text"
-                name="lead"
-                className="form-control"
-                onChange={this.handleChange}
-                value={this.state.lead ? this.state.lead : ""}
-              />
-            </label>
+            <Field
+              type="text"
+              name="lead"
+              label="Lead"
+              component={renderInput}
+            />
           </div>
           <div className="form-group">
-            <label style={Styles.formElement} > Number of Players
-              <input
-                type="number"
-                name="currentPlayers"
-                className="form-control"
-                onChange={this.handleChange}
-                value={this.state.currentPlayers ? this.state.currentPlayers: ""}
-              />
-            </label>
+            <Field
+              type="number"
+              name="currentPlayers"
+              label="Number of Players"
+              component={renderInput}
+            />
           </div>
           <div className="form-group">
-            <label style={Styles.formElement} > Players Needed
-              <input
-                type="number"
-                className="form-control"
-                name="playersNeeded"
-                onChange={this.handleChange}
-                value={this.state.playersNeeded ? this.state.playersNeeded : ""}
-              />
-            </label>
+            <Field
+              type="number"
+              label="Players Needed"
+              component={renderInput}
+              name="playersNeeded"
+            />
           </div>
           <div className="form-group">
-            <label style={Styles.formElement} > Description
-              <textarea
-                style={Styles.textArea}
-                className="form-control"
-                name="description"
-                rows="3"
-                onChange={this.handleChange}
-                value={this.state.description ? this.state.description : ""}
-              />
-            </label>
+            <Field
+              label="Description"
+              style={Styles.textArea}
+              name="description"
+              component={renderTextArea}
+              rows="3"
+            />
+          </div>
+          <div>
+            {error && <strong style={ Styles.error}> {error}</strong>}
           </div>
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>
@@ -136,4 +176,8 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps,{postGame, wipeStatus})(GamePost)
+GamePost = reduxForm({
+  form: 'gamePost'
+})(GamePost)
+
+export default connect(mapStateToProps,{postGame, initForm: initialize})(GamePost)

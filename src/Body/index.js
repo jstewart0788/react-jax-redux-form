@@ -27,10 +27,12 @@ class Body extends Component {
       this.props.games ?
       this.props.games.map((game, index) => {
         return (
-          <GameGroup
-            key={`${game.game}${game.lead}${index}`}
-            gameData={game}
-          />
+          <Link
+            to={`/game/edit/${game._id}`}
+            key={`${game._id}`}
+          >
+            <GameGroup gameData={game} />
+          </Link>
         )
       }) :
       <div> Loading . . . </div>

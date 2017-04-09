@@ -9,5 +9,6 @@ export default (
     <Route path="/" component={App}>
       <IndexRoute component={Body} />
       <Route path="game/new" component={GamePost} />
+      <Route path="game/edit/:id" component={GamePost} />
     </Route>
 );
